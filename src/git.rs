@@ -4,6 +4,7 @@ use std::process::{Stdio, Command};
 
 use regex::Regex;
 
+use crate::config::LazyGitConfig;
 use crate::structs;
 
 pub fn checkout_new_branch(branch_prefix: String, args: structs::BranchArgs) {
@@ -25,19 +26,19 @@ pub fn reset_all_staged_changes() {
     .output();
 }
 
-pub fn commit_staged_changes(args: structs::CommitArgs) {
+pub fn commit_staged_changes(config: LazyGitConfig, args: structs::CommitArgs) {
   let branch = Command::new("git")
   .args(["symbolic-ref", "--short", "HEAD"])
   .output()
   .expect("Failed to get current git branch name, cannot attempt commit.")
   .stdout;
 
-  let branch_string = String::from_utf8_lossy(&branch).into_owned();
-  let ticket_number = Regex::new(r"\d+").unwrap().find(&branch_string)
-    .expect("Branch does not contain number, likely does not conform to convention.")
+  let branch_string: String = String::from_utf8_lossy(&branch).into_owned();
+  let commit_extraction_value = Regex::new(config.commit_extraction_regex.as_str()).unwrap().find(&branch_string)
+    .unwrap()
     .as_str();
 
-  let formatted_args = format!("VERREN-{}:{}", ticket_number, args.message);
+  let formatted_args = format!("{}{}:{}", config.commit_prefix, commit_extraction_value, args.message);
   let mut child = Command::new("git")
     .args(["commit", "-m", &formatted_args])
     .stdout(Stdio::piped())

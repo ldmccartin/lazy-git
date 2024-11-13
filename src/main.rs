@@ -34,15 +34,26 @@ fn main() {
     match cli.command {
         Commands::Config(args) => {
             if args.branch_prefix.is_some() {
-                config::set_config(args.branch_prefix.unwrap())
-            } else {
-                config::display_config()
+                config::set_config_branch_prefix(args.branch_prefix.unwrap());
+                return;
             }
+
+            if args.commit_extraction_regex.is_some() {
+                config::set_config_commit_extraction_regex(args.commit_extraction_regex.unwrap());
+                return;
+            }
+
+            if args.commit_prefix.is_some() {
+                config::set_config_commit_prefix(args.commit_prefix.unwrap());
+                return;
+            }
+
+            config::display_config()
         }
 
         Commands::B(args) => {git::checkout_new_branch(config::get_config().branch_prefix, args)}
 
-        Commands::C(args) => {git::commit_staged_changes(args)}
+        Commands::C(args) => {git::commit_staged_changes(config::get_config(), args)}
 
         Commands::A => {git::stage_all_changes()}
         
