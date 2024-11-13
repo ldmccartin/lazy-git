@@ -13,9 +13,8 @@ pub fn set_config(branch_prefix: String) {
     }
 }
 
-pub fn display_conifg() {
-    let config: LazyGitConfig = confy::load(PACKAGE_NAME, None).unwrap();
-    println!("{:?}", config);
+pub fn display_config() {
+    println!("{:?}", get_config());
 }
 
 pub fn get_config() -> LazyGitConfig {

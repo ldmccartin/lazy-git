@@ -11,7 +11,6 @@ pub struct BranchArgs {
 
 #[derive(Parser)]
 pub struct ConfigArgs {
-    /// Set the parent folder where all Rente projects are contained.
     #[arg(short = 'p', long)]
     pub branch_prefix: Option<String>,
 }

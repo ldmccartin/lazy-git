@@ -36,15 +36,15 @@ fn main() {
             if args.branch_prefix.is_some() {
                 config::set_config(args.branch_prefix.unwrap())
             } else {
-                config::display_conifg()
+                config::display_config()
             }
         }
 
-        Commands::B(args) => {git::checkout_new_branch(config::get_config().branch_prefix, args);}
+        Commands::B(args) => {git::checkout_new_branch(config::get_config().branch_prefix, args)}
 
-        Commands::C(args) => {git::commit_staged_changes(args);}
+        Commands::C(args) => {git::commit_staged_changes(args)}
 
-        Commands::A => {git::stage_all_changes();}
+        Commands::A => {git::stage_all_changes()}
         
         Commands::R => {git::reset_all_staged_changes()}
     }
