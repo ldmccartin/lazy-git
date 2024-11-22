@@ -35,17 +35,14 @@ fn main() {
         Commands::Config(args) => {
             if args.branch_prefix.is_some() {
                 config::set_config_branch_prefix(args.branch_prefix.unwrap());
-                return;
             }
 
             if args.commit_extraction_regex.is_some() {
                 config::set_config_commit_extraction_regex(args.commit_extraction_regex.unwrap());
-                return;
             }
 
             if args.commit_prefix.is_some() {
                 config::set_config_commit_prefix(args.commit_prefix.unwrap());
-                return;
             }
 
             config::display_config()
